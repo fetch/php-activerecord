@@ -28,11 +28,12 @@ if (!defined('PHP_ACTIVERECORD_AUTOLOAD_DISABLE'))
 function activerecord_autoload($full_class_name)
 {
 	$paths = ActiveRecord\Config::instance()->get_model_directories();
+	$namespaces = ActiveRecord\get_namespaces($class_name);
 	
 	foreach($paths as $path){
 		$root = realpath(isset($path) ? $path : '.');
 
-		if (($namespaces = ActiveRecord\get_namespaces($full_class_name)))
+		if ($namespaces)
 		{
 			$class_name = array_pop($namespaces);
 			$directories = array();
