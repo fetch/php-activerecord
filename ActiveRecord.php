@@ -28,7 +28,6 @@ if (!defined('PHP_ACTIVERECORD_AUTOLOAD_DISABLE'))
 function activerecord_autoload($class_name)
 {
 	$paths = ActiveRecord\Config::instance()->get_model_directories();
-#	var_dump($paths);
 	$namespace_directory = '';
 	if (($namespaces = ActiveRecord\get_namespaces($class_name))){
 		$class_name = array_pop($namespaces);
