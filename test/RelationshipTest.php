@@ -358,7 +358,7 @@ class RelationshipTest extends DatabaseTest
 	}
 
 	/**
-	 * @expectedException ReflectionException
+	 * @expectedException ActiveRecord\RelationshipException
 	 */
 	public function test_has_many_through_with_invalid_class_name()
 	{
