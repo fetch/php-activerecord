@@ -634,7 +634,6 @@ class Validations
 				$sql = "{$pk_quoted} != ?";
 				array_push($conditions,$pk_value);
 			}
-			$class = $this->klass;
 
 			foreach ($fields as $field)
 			{
