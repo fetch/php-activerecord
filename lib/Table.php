@@ -16,6 +16,8 @@ namespace ActiveRecord;
 class Table
 {
 	private static $cache = array();
+	
+	private $model_cacher;
 
 	public $class;
 	public $conn;
@@ -72,10 +74,24 @@ class Table
 		else
 			self::$cache = array();
 	}
+	
+	protected function model_cacher()
+	{
+		if(isset($this->model_cacher))
+			return $this->model_cacher;
+		return $this->model_cacher = new ModelCacher();
+	}
+	
+	public function remove_model_from_cache($model)
+	{
+		$this->model_cacher->remove_model($model);
+	}
 
 	public function __construct($class_name)
 	{
 		$this->class = Reflections::instance()->add($class_name)->get($class_name);
+		
+		$this->model_cacher = $this->model_cacher();
 
 		$this->reestablish_connection(false);
 		$this->set_table_name();
@@ -220,6 +236,14 @@ class Table
 		while (($row = $sth->fetch()))
 		{
 			$model = new $this->class->name($row,false,true,false);
+			if($this->model_cacher->has_model($model))
+			{
+				$model = $this->model_cacher->retrieve_model($model);
+			}
+			else
+			{
+				$this->model_cacher->add_model($model);
+			}
 
 			if ($readonly)
 				$model->readonly();
