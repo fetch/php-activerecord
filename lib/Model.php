@@ -577,7 +577,7 @@ class Model
 	public function get_primary_key($first=false)
 	{
 		$pk = static::table()->pk;
-		return $first ? $pk[0] : $pk;
+		return $first && isset($pk[0])? $pk[0] : $pk;
 	}
 
 	/**
@@ -1242,6 +1242,8 @@ class Model
 	{
 		$this->__relationships = array();
 		$pk = array_values($this->get_values_for($this->get_primary_key()));
+		
+		$this->table()->remove_model_from_cache($this);
 
 		$this->set_attributes_via_mass_assignment($this->find($pk)->attributes, false);
 		$this->reset_dirty();
